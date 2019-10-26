@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pb.weixin.dao.ISongDao">
+
+	<resultMap id="songMap" type="com.pb.weixin.vo.Song">
+	    <id column="SONG_ID" jdbcType="INTEGER" property="songId" />
+	    <result column="SONG_NAME" jdbcType="VARCHAR" property="songName" />
+	    <result column="SINGER_ID" jdbcType="INTEGER" property="singerId" />
+	    <result column="CD_ID" jdbcType="INTEGER" property="cdId" />
+	    <result column="LANGUAGE" jdbcType="INTEGER" property="language" />
+	    <result column="PLAY_COUNT" jdbcType="INTEGER" property="playCount" />
+	    <result column="DOWNLOAD_COUNT" jdbcType="INTEGER" property="downloadCount" />
+	    <result column="COLLECTION_COUNT" jdbcType="INTEGER" property="collectionCount" />
+	    <result column="PUBLISH_DATE" jdbcType="DATE" property="publishDate" />
+	    <result column="SONG_URL" jdbcType="VARCHAR" property="songUrl" />
+	    <result column="CYRIC_URL" jdbcType="VARCHAR" property="cyricUrl" />
+	    <result column="IMG_URL" jdbcType="VARCHAR" property="imgUrl" />
+	    <result column="SONG_TIME" jdbcType="DATE" property="songTime" />
+	    <result column="TYPE_ID" jdbcType="INTEGER" property="typeId" />
+	    <result column="SONG_STATE_ID" jdbcType="INTEGER" property="songStateId" />
+	</resultMap> 
+	
+	<sql id="ColumnList" >
+        t.SONG_ID,t.SONG_NAME,t.SINGER_ID,t.CD_ID,
+        t.LANGUAGE,t.PLAY_COUNT,t.DOWNLOAD_COUNT,t.COLLECTION_COUNT,
+        t.PUBLISH_DATE,t.SONG_URL,t.CYRIC_URL,t.IMG_URL, t.SONG_TIME,t.TYPE_ID,t.SONG_STATE_ID
+    </sql>
+    
+    <sql id="queryByCondition">
+    	<where>
+        
+		    <if test="t != null and t.songId != null and t.songId != ''">
+		        and t.SONG_ID = #{t.songId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.songName != null  and t.songName != ''">
+		        and t.SONG_NAME like CONCAT('%', #{t.songName ,jdbcType=VARCHAR}, '%')
+		    </if>
+		    <if test="t != null and t.singerId != null  and t.singerId != ''">
+		        and t.SINGER_ID = #{t.singerId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.cdId != null and t.cdId != ''">
+		        and t.CD_ID = #{t.cdId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.language != null and t.language != ''">
+		        and t.LANGUAGE = #{t.language ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.playCount != null and t.playCount != ''">
+		         t.PLAY_COUNT = #{t.playCount ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.downloadCount != null and t.downloadCount != ''">
+		        and t.DOWNLOAD_COUNT = #{t.downloadCount ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.collectionCount != null and t.collectionCount != ''">
+		       and  t.COLLECTION_COUNT = #{t.collectionCount ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.publishDate != null">
+		       and  t.PUBLISH_DATE = #{t.publishDate ,jdbcType=Date}
+		    </if>
+		    <if test="t != null and t.songUrl != null and t.songUrl != ''">
+		       and  t.SONG_URL = #{t.songUrl ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.cyricUrl != null and t.cyricUrl != ''">
+		       and  t.CYRIC_URL = #{t.cyricUrl ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.songTime != null and t.songTime != ''">
+		         t.SONG_TIME = #{t.songTime ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.typeId != null and t.typeId != ''">
+		       and  t.TYPE_ID = #{t.typeId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.songStateId != null and t.songStateId != ''">
+		       and  t.SONG_STATE_ID = #{t.songStateId ,jdbcType=INTEGER}
+		    </if>
+		 </where>
+  	</sql>
+	
+	<select id="queryTotalCount" resultType="int">
+		SELECT COUNT(1) FROM t_song t
+		
+		<include refid="queryByCondition"/>
+	</select>
+	
+	
+		
+    
+    <select id="queryListPage" resultMap="songMap" >
+    
+        select <include refid="ColumnList"/> from t_song t
+       
+		 <include refid="queryByCondition"/>
+		 
+		 
+		 <!--  的值为0的时候，因为其数据类型为Integer，所以这个判断是为false的，就是说int类型的判断，Mybatis是认定0为''的，所以为false。 -->
+		 <if test="curPage != null and pageSize != null">
+		        limit #{curPage} ,#{pageSize}
+		 </if>
+    </select>
+
+
+
+    <select id="getSongsAll" resultMap="songMap">
+        select * from t_song
+    </select>
+    
+    <select id="getSongsBy" resultMap="songMap">
+        select * from t_song
+        <where>
+        	<if test="songId != null and songId != ''">
+        		and SONG_ID = #{songId,jdbcType=INTEGER}
+        	</if>
+        	<if test="songName != null and songName != ''">
+        		and SONG_NAME = #{songName,jdbcType=VARCHAR}
+        	</if>
+        	<if test="singerId != null and singerId != ''">
+        		and SINGER_ID = #{singerId,jdbcType=INTEGER}
+        	</if>
+        	<if test="cdId != null and cdId != ''">
+        		and CD_ID = #{cdId,jdbcType=INTEGER}
+        	</if>
+        	<if test="language != null and language != ''">
+        		and LANGUAGE = #{language,jdbcType=INTEGER}
+        	</if>
+        	<if test="playCount != null and playCount != ''">
+        		and PLAY_COUNT = #{playCount,jdbcType=INTEGER}
+        	</if>
+        	<if test="downloadCount != null and downloadCount != ''">
+        		and DOWNLOAD_COUNT = #{downloadCount,jdbcType=INTEGER}
+        	</if>
+        	<if test="collectionCount != null and collectionCount != ''">
+        		and COLLECTION_COUNT = #{collectionCount,jdbcType=INTEGER}
+        	</if>
+        	<if test="publishDate != null and publishDate != ''">
+        		and PUBLISH_DATE = #{publishDate,jdbcType=VARCHAR}
+        	</if>
+        	<if test="songUrl != null and songUrl != ''">
+        		and SONG_URL = #{songUrl,jdbcType=VARCHAR}
+        	</if>
+        	<if test="cyricUrl != null and cyricUrl != ''">
+        		and CYRIC_URL = #{cyricUrl,jdbcType=VARCHAR}
+        	</if>
+        	<if test="songTime != null and songTime != ''">
+        		and SONG_TIME = #{songTime,jdbcType=VARCHAR}
+        	</if>
+        	<if test="typeId != null and typeId != ''">
+        		and TYPE_ID = #{typeId,jdbcType=INTEGER}
+        	</if>
+        	<if test="songStateId != null and songStateId != ''">
+        		and SONG_STATE_ID = #{songStateId,jdbcType=INTEGER}
+        	</if>
+        </where>
+    
+    </select>
+    
+    <!-- 根据用户ID来查询自己收藏的歌曲信息 -->
+    
+    <select id="getCollectionSongByUserId" resultMap="songMap">
+    	SELECT * FROM t_song  WHERE song_id IN 
+    	 (SELECT t1.song_id FROM t_song_list_with_song t1 WHERE song_list_id in 
+    	  (SELECT song_list_id FROM t_user_with_song_list WHERE user_id = #{userId, jdbcType=INTEGER} ) )
+    </select>
+    
+    
+</mapper>

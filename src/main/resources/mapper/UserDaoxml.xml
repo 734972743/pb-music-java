@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pb.weixin.dao.IUserDao">
+
+	<resultMap id="userMap" type="com.pb.weixin.vo.User">
+	    <id column="USER_ID" jdbcType="INTEGER" property="userId" />
+	    <result column="LOGIN_ID" jdbcType="VARCHAR" property="loginId" />
+	    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+	    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+	    <result column="USER_SEX" jdbcType="INTEGER" property="userSex" />
+	    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+	    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+	    <result column="USER_TYPE" jdbcType="INTEGER" property="userType" />
+	    <result column="SIGN" jdbcType="VARCHAR" property="sign" />
+	    <result column="HEAD_SCULPTURE_URL" jdbcType="VARCHAR" property="headSculptureUrl" />
+	    <result column="REGISTATION_DATE" jdbcType="TIMESTAMP" property="registationDate" />
+	    <result column="USER_STATE_ID" jdbcType="INTEGER" property="userStateId" />
+	</resultMap> 
+
+    <select id="getUsers" resultMap="userMap">
+        select * from t_user t <include refid="queryByCondition"></include>
+    </select>
+    
+    <select id="getUserByLoginIdAndPassword" resultMap="userMap">
+        select * from t_user
+        where login_id = #{loginId,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="getUserByPasswordAndId" resultMap="userMap">
+    	select * from t_user 
+    	where password = #{password,jdbcType=VARCHAR} and user_id = #{userId,jdbcType=INTEGER}
+    </select>
+    
+    <sql id="queryByCondition">
+    	<where>
+		    <if test="t != null and t.userId != null and t.userId != ''">
+		         USER_ID = #{t.userId ,jdbcType=VARCHAR}
+		    </if>
+		   
+		    <if test="t != null and t.loginId != null and t.loginId != ''">
+		        AND loginId = #{t.loginId ,jdbcType=VARCHAR}
+		    </if>
+		    
+		    <if test="t != null and t.password != null and t.password != ''">
+		        AND PASSWORD = #{t.password ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.userName != null and t.userName != ''">
+		        AND USER_NAME = #{t.userName ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.userSex != null and t.userSex != ''">
+		        AND USER_SEX = #{t.userSex ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.email != null and t.email != ''">
+		        AND EMAIL = #{t.email ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.phone != null and t.phone != ''">
+		        AND PHONE = #{t.phone ,jdbcType=VARCHAR}
+		    </if>
+		    
+		    <if test="t != null and t.userType != null and t.userType != ''">
+		        AND USER_TYPE = #{t.userType ,jdbcType=INTEGER}
+		    </if>
+		    
+		    <if test="t != null and t.sign != null and t.sign != ''">
+		        AND SIGN = #{t.sign ,jdbcType=VARCHAR}
+		    </if>
+		    
+		    <if test="t != null and t.headSculptureUrl != null and t.headSculptureUrl != ''">
+		        AND HEAD_SCULPTURE_URL = #{t.headSculptureUrl ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.registationDate != null and t.registationDate != ''">
+		        AND REGISTATION_DATE = #{t.registationDate ,jdbcType=TIMESTAMP}
+		    </if>
+		    <if test="t != null and t.userStateId != null and t.userStateId != ''">
+		        AND USER_STATE_ID = #{t.userStateId ,jdbcType=INTEGER}
+		    </if>
+		 </where>	
+    </sql>
+    
+    
+    <!--  动态查询包括分页  -->
+    <select id="queryListPage"  resultMap="userMap">
+    	SELECT * FROM t_user t
+    	<where>
+		  <if test="t != null and t.userId != null and t.userId != ''">
+		         USER_ID = #{t.userId ,jdbcType=VARCHAR}
+		    </if>
+		   
+		    <if test="t != null and t.loginId != null and t.loginId != ''">
+		        AND loginId = #{t.loginId ,jdbcType=VARCHAR}
+		    </if>
+		    
+		    <if test="t != null and t.password != null and t.password != ''">
+		        AND PASSWORD = #{t.password ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.userName != null and t.userName != ''">
+		        AND USER_NAME = #{t.userName ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.userSex != null and t.userSex != ''">
+		        AND USER_SEX = #{t.userSex ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.email != null and t.email != ''">
+		        AND EMAIL = #{t.email ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.phone != null and t.phone != ''">
+		        AND PHONE = #{t.phone ,jdbcType=VARCHAR}
+		    </if>
+		    
+		    <if test="t != null and t.userType != null and t.userType != ''">
+		        AND USER_TYPE = #{t.userType ,jdbcType=INTEGER}
+		    </if>
+		    
+		    <if test="t != null and t.sign != null and t.sign != ''">
+		        AND SIGN = #{t.sign ,jdbcType=VARCHAR}
+		    </if>
+		    
+		    <if test="t != null and t.headSculptureUrl != null and t.headSculptureUrl != ''">
+		        AND HEAD_SCULPTURE_URL = #{t.headSculptureUrl ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.registationDate != null and t.registationDate != ''">
+		        AND REGISTATION_DATE = #{t.registationDate ,jdbcType=TIMESTAMP}
+		    </if>
+		    <if test="t != null and t.userStateId != null and t.userStateId != ''">
+		        AND USER_STATE_ID = #{t.userStateId ,jdbcType=INTEGER}
+		    </if>
+		    
+		    
+		    <if test="curPage != null and pageSize != null">
+		       limit #{curPage ,jdbcType=INTEGER},#{pageSize ,jdbcType=INTEGER}
+		    </if> 
+		    
+		  </where>
+    </select>
+    
+    
+    <!-- 验证用户账号是否存在 -->
+    <select id="getByLoginId" resultType="int">
+    	SELECT COUNT(1) FROM t_user WHERE login_id = #{loginId,jdbcType=VARCHAR}
+    
+    </select>
+    
+    <insert id="saveUser" parameterType="com.pb.weixin.vo.User">
+    	insert into t_user(LOGIN_ID,PASSWORD,USER_NAME,USER_SEX) values (#{loginId,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
+    	#{userName,jdbcType=VARCHAR},#{userSex,jdbcType=INTEGER})
+    </insert>
+    
+    <!-- 动态修改 -->
+    <update id="updateUserByCondition">
+    	update t_user
+	    <set>
+		    <if test="loginId != null">
+		         loginId = #{loginId,jdbcType=INTEGER},
+		    </if>
+		    
+		    <if test="password != null">
+		         PASSWORD = #{password ,jdbcType=VARCHAR},
+		    </if>
+		    <if test="userName != null">
+		         USER_NAME = #{userName ,jdbcType=VARCHAR},
+		    </if>
+		    <if test="userSex != null">
+		         USER_SEX = #{userSex,jdbcType=INTEGER},
+		    </if>
+		    <if test="email != null">
+		         EMAIL = #{email ,jdbcType=VARCHAR},
+		    </if>
+		    <if test="phone != null">
+		         PHONE = #{phone ,jdbcType=VARCHAR},
+		    </if>
+		    
+		    <if test="userType != null">
+		         USER_TYPE = #{userType,jdbcType=INTEGER},
+		    </if>
+		    
+		    <if test="sign != null">
+		         SIGN = #{sign ,jdbcType=VARCHAR},
+		    </if>
+		    <if test="headSculptureUrl != null">
+		         HEAD_SCULPTURE_URL = #{headSculptureUrl ,jdbcType=VARCHAR},
+		    </if>
+		    <if test="userStateId != null">
+		         USER_STATE_ID = #{userStateId,jdbcType=INTEGER},
+		    </if>
+	    </set>
+	  where USER_ID=#{userId}
+    </update>
+    
+    <delete id="deleteUserById">
+    	delete from t_user from USER_ID=#{userId}
+    </delete>
+   
+</mapper>

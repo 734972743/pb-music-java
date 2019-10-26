@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pb.weixin.dao.ISongListWithSongDao">
+
+	<resultMap id="songListWithSongMap" type="com.pb.weixin.vo.SongListWithSong">
+	    <id column="SL_SONG_ID" jdbcType="INTEGER" property="slSongId" />
+	    <result column="SONG_LIST_ID" jdbcType="INTEGER" property="songListId" />
+	    <result column="SONG_ID" jdbcType="INTEGER" property="songId" />
+	    <result column="COLLECTION_DATE" jdbcType="TIMESTAMP" property="collectionDate" />
+	</resultMap> 
+	
+	
+	<sql id="ColumnList" >
+        t.SL_SONG_ID,t.SONG_LIST_ID,t.SONG_ID,t.COLLECTION_DATE  
+    </sql> 
+	
+	<sql id="queryByCondition">
+    	<where>
+		    <if test="t != null and t.slSongId != null and t.slSongId != ''">
+		        and t.SL_SONG_ID = #{t.slSongId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.songListId != null and t.songListId != ''">
+		        and t.SONG_LIST_ID = #{t.songListId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.songId != null and t.songId != ''">
+		        and t.SONG_ID = #{t.songId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.collectionDate != null">
+		        and t.COLLECTION_DATE = #{t.collectionDate ,jdbcType=TIMESTAMP}
+		    </if> 
+		 </where>
+  	</sql>
+  	
+  	
+  	
+  	<select id="getSongListWithSongBy" resultMap="songListWithSongMap">
+  		select <include refid="ColumnList" /> from  t_song_list_with_song t
+  		<include refid="queryByCondition"></include>
+  	</select>
+  	
+  	
+  	<insert id="addSongListWithSong" useGeneratedKeys="true" keyColumn="SL_SONG_ID" keyProperty="t.slSongId" parameterType="com.pb.weixin.vo.SongListWithSong">
+  	   <!--   insert into t_song_list_with_song (SONG_LIST_ID,SONG_ID,COLLECTION_DATE) values (
+  		#{songListId,jdbcType=INTEGER}, #{songId,jdbcType=INTEGER}, #{collectionDate,jdbcType=TIMESTAMP}
+  		)	-->	
+  		
+  		insert into t_song_list_with_song
+  		<trim prefix="(" suffix=")" suffixOverrides=",">
+		    <if test="t != null and t.songListId != null ">
+		        SONG_LIST_ID,
+		    </if>
+		    <if test="t != null and t.songId != null">
+		        SONG_ID ,
+		    </if>
+		    <if test="t != null and t.collectionDate != null">
+		         COLLECTION_DATE,
+		    </if>
+    	</trim>
+    	values 
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+		    <if test="t != null and t.songListId != null">
+		        #{t.songListId ,jdbcType=INTEGER},
+		    </if>
+		    <if test="t != null and t.songId != null ">
+		        #{t.songId ,jdbcType=INTEGER},
+		    </if>
+		    <if test="t != null and t.collectionDate != null">
+		        #{t.collectionDate ,jdbcType=INTEGER},
+		    </if>
+    	</trim>
+  		
+  	</insert>
+  	
+  	<delete id="deleteSongListWithSong" >
+  		delete t from t_song_list_with_song t <include refid="queryByCondition"></include>
+  	</delete>
+  	
+  	<update id="updateSongListWithSong">
+  	
+  		update t_song_list_with_song t 
+  		
+  		<set>
+		    
+		    <if test="t != null and t.songListId != null and t.songListId != ''">
+		         t.SONG_LIST_ID = #{songListId,jdbcType=INTEGER},
+		    </if>
+		    
+		    <if test="t != null and t.songId != null and t.songId != ''">
+		         t.SONG_ID = #{songId,jdbcType=INTEGER},
+		    </if>
+		    
+		    <if test="t != null and t.collectionDate != null and t.collectionDate != ''">
+		         t.COLLECTION_DATE = #{collectionDate ,jdbcType=TIMESTAMP},
+		    </if>	    		    
+		</set>
+		
+		where t.SL_SONG_ID = #{slSongId,jdbcType=INTEGER}
+  	</update>
+
+
+</mapper>

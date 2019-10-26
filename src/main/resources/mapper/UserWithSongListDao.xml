@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pb.weixin.dao.IUserWithSongListDao">
+
+	<resultMap id="userWithSongListMap" type="com.pb.weixin.vo.UserWithSongList">
+	    <id column="U_SONG_LIST_ID" jdbcType="INTEGER" property="uSongListId" />
+	    <result column="USER_ID" jdbcType="INTEGER" property="userId" />
+	    <result column="SONG_LIST_ID" jdbcType="INTEGER" property="songListId" />
+	    <result column="COLLECTION_DATE" jdbcType="DATE" property="collectionDate" />
+	</resultMap> 
+	
+	
+	<sql id="ColumnList" >
+        t.U_SONG_LIST_ID,t.USER_ID,t.SONG_LIST_ID,t.COLLECTION_DATE  
+    </sql> 
+	
+	<sql id="queryByCondition">
+    	<where>
+		    <if test="t != null and t.uSongListId != null and t.uSongListId != ''">
+		        and t.U_SONG_LIST_ID = #{t.uSongListId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.userId != null  and t.userId != ''">
+		        and t.USER_ID = #{t.userId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.songListId != null and t.songListId != ''">
+		        and t.SONG_LIST_ID = #{t.songListId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.collectionDate != null and t.collectionDate != ''">
+		        and t.COLLECTION_DATE = #{t.collectionDate ,jdbcType=DATE}
+		    </if> 
+		 </where>
+  	</sql>
+  	
+  	
+  	
+  	<select id="getUserWithSongListsBy" resultMap="userWithSongListMap">
+  		select <include refid="ColumnList" /> from  t_user_with_song_list t
+  		<include refid="queryByCondition"></include>
+  	</select>
+  	
+  	
+  	<insert id="addUserWithSongList" useGeneratedKeys="true" keyColumn="U_SONG_LIST_ID"  keyProperty="t.uSongListId" parameterType="com.pb.weixin.vo.UserWithSongList">	
+  	   insert into t_user_with_song_list
+  	   <trim prefix="(" suffix=")" suffixOverrides=",">
+		    <if test="t != null and t.userId != null ">
+		        USER_ID,
+		    </if>
+		    <if test="t != null and t.songListId != null">
+		        SONG_LIST_ID ,
+		    </if>
+		    <if test="t != null and t.collectionDate != null">
+		         COLLECTION_DATE,
+		    </if>
+    	</trim>
+    	values 
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+		    <if test="t != null and t.userId != null">
+		        #{t.userId ,jdbcType=INTEGER},
+		    </if>
+		    <if test="t != null and t.songListId != null ">
+		        #{t.songListId ,jdbcType=INTEGER},
+		    </if>
+		    <if test="t != null and t.collectionDate != null">
+		        #{t.collectionDate ,jdbcType=INTEGER},
+		    </if>
+    	</trim>	
+  	</insert>
+  	
+  	<update id="updateUserWithSongList">
+  		update t_user_with_song_list t
+  		<set>
+		    <if test="t != null and t.songListId != null and t.songListId != ''">
+		         t.USER_ID = #{userId,jdbcType=INTEGER},
+		    </if>
+		    
+		    <if test="t != null and t.songId != null and t.songId != ''">
+		         t.SONG_LIST_ID = #{songListId,jdbcType=INTEGER},
+		    </if>
+		    
+		    <if test="t != null and t.collectionDate != null and t.collectionDate != ''">
+		         t.COLLECTION_DATE = #{collectionDate ,jdbcType=TIMESTAMP},
+		    </if>	    		    
+		</set>
+  	</update>
+  	
+  	<delete id="deleteUserWithSongList"> 
+  		delete t from t_user_with_song_list t where t.USER_ID = #{t.userId,jdbcType=INTEGER} 
+  		and t.SONG_LIST_ID = #{t.songListId,jdbcType=INTEGER} 
+  	</delete>	  
+	    
+
+
+		
+	
+
+</mapper>

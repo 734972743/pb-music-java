@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pb.weixin.dao.ISongListDao">
+
+	<resultMap id="SongListMap" type="com.pb.weixin.vo.SongList">
+	    <id column="SONG_LIST_ID" jdbcType="INTEGER" property="songListId" />
+	    <result column="SONG_LIST_NAME" jdbcType="VARCHAR" property="songListName" />
+	    <result column="TYPE_ID" jdbcType="INTEGER" property="typeId" />
+	    <result column="ACCESS_COUNT" jdbcType="INTEGER" property="accessAount" />
+	    <result column="INTRODUCE" jdbcType="VARCHAR" property="introduce" />
+	    <result column="COLLECTION_COUNT" jdbcType="INTEGER" property="collectionCount" />
+	    <result column="TAGS" jdbcType="INTEGER" property="tags" />
+	    <result column="SONG_LIST_STATE_ID" jdbcType="INTEGER" property="songListStateId" />
+	</resultMap> 
+	
+	
+	<sql id="ColumnList" >
+        t.SONG_LIST_ID,t.SONG_LIST_NAME,t.TYPE_ID,t.ACCESS_COUNT,t.INTRODUCE,
+        t.COLLECTION_COUNT,t.TAGS,t.SONG_LIST_STATE_ID 
+    </sql> 
+	
+	<sql id="queryByCondition">
+    	<where>
+		    <if test="t != null and t.songListId != null and t.songListId != ''">
+		        and t.SONG_LIST_ID = #{t.songListId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.songListName != null  and t.songListName != ''">
+		        and t.SONG_LIST_NAME = #{t.songListName ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.typeId != null and t.typeId != ''">
+		        and t.TYPE_ID = #{t.typeId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.accessAount != null and t.accessAount != ''">
+		        and t.ACCESS_COUNT = #{t.accessAount ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.introduce != null and t.introduce != ''">
+		        and t.INTRODUCE = #{t.introduce ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.collectionCount != null and t.collectionCount != ''">
+		        and t.COLLECTION_COUNT = #{t.collectionCount ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.tags != null and t.tags != ''">
+		        and t.TAGS = #{t.tags ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.songListStateId != null and t.songListStateId != ''">
+		        and t.SONG_LIST_STATE_ID = #{t.songListStateId ,jdbcType=INTEGER}
+		    </if>
+		   
+		 </where>
+  	</sql>
+  	
+  	
+  	
+  	<select id="getSongListsBy" resultMap="SongListMap">
+  		select <include refid="ColumnList" /> from  t_song_list t
+  		<include refid="queryByCondition"></include>
+  	</select>
+  	
+  	
+  	<sql id="updateSql">
+  		 <if test="t != null and t.songListName != null  and t.songListName != ''">
+		         t.SONG_LIST_NAME = #{t.songListName ,jdbcType=VARCHAR},
+		    </if>
+		    <if test="t != null and t.typeId != null ">
+		         t.TYPE_ID = #{t.typeId ,jdbcType=INTEGER},
+		    </if>
+		    <if test="t != null and t.accessAount != null ">
+		         t.ACCESS_COUNT = #{t.accessAount ,jdbcType=INTEGER},
+		    </if>
+		    <if test="t != null and t.introduce != null and t.introduce != ''">
+		         t.INTRODUCE = #{t.introduce ,jdbcType=VARCHAR},
+		    </if>
+		    <if test="t != null and t.collectionCount != null ">
+		         t.COLLECTION_COUNT = #{t.collectionCount ,jdbcType=INTEGER},
+		    </if>
+		    <if test="t != null and t.tags != null and t.tags != ''">
+		         t.TAGS = #{t.tags ,jdbcType=INTEGER},
+		    </if>
+		    <if test="t != null and t.songListStateId != null ">
+		         t.SONG_LIST_STATE_ID = #{t.songListStateId ,jdbcType=INTEGER},
+		    </if>
+  		
+  	</sql>
+  	
+  	<insert id="addSongList" useGeneratedKeys="true" keyColumn="SONG_LIST_ID"  keyProperty="t.songListId" parameterType="com.pb.weixin.vo.SongList">
+  		insert into t_song_list  
+  		 
+  		<trim prefix="(" suffix=")" suffixOverrides=",">
+		    <if test="t != null and t.songListName != null  and t.songListName != ''">
+		        SONG_LIST_NAME,
+		    </if>
+		    <if test="t != null and t.typeId != null ">
+		        TYPE_ID,
+		    </if>
+		    <if test="t != null and t.accessAount != null">
+		        ACCESS_COUNT ,
+		    </if>
+		    <if test="t != null and t.introduce != null and t.introduce != ''">
+		        INTRODUCE ,
+		    </if>
+		    <if test="t != null and t.collectionCount != null">
+		         COLLECTION_COUNT,
+		    </if>
+		    <if test="t != null and t.tags != null ">
+		        TAGS,
+		    </if>
+		    <if test="t != null and t.songListStateId != null ">
+		        SONG_LIST_STATE_ID,
+		    </if>
+    	</trim>
+    	values 
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+		    <if test="t != null and t.songListName != null  and t.songListName != ''">
+		        #{t.songListName ,jdbcType=VARCHAR},
+		    </if>
+		    <if test="t != null and t.typeId != null ">
+		        #{t.typeId ,jdbcType=INTEGER},
+		    </if>
+		    <if test="t != null and t.accessAount != null">
+		        #{t.accessAount ,jdbcType=INTEGER},
+		    </if>
+		    <if test="t != null and t.introduce != null and t.introduce != ''">
+		        #{t.introduce ,jdbcType=VARCHAR},
+		    </if>
+		    <if test="t != null and t.collectionCount != null">
+		         #{t.collectionCount ,jdbcType=INTEGER},
+		    </if>
+		    <if test="t != null and t.tags != null ">
+		        #{t.tags ,jdbcType=INTEGER},
+		    </if>
+		    <if test="t != null and t.songListStateId != null ">
+		       #{t.songListStateId ,jdbcType=INTEGER},
+		    </if>
+    	</trim>
+  
+  		
+  		
+  		<!--  
+  		(SONG_LIST_NAME,TYPE_ID,ACCESS_COUNT,INTRODUCE,COLLECTION_COUNT,TAGS,SONG_LIST_STATE_ID) 
+  		values (
+  		#{t.songListName,jdbcType=VARCHAR}, #{t.typeId,jdbcType=INTEGER}, #{t.accessAount,jdbcType=INTEGER}, #{t.introduce,jdbcType=VARCHAR},
+  		  #{t.collectionCount,jdbcType=INTEGER},#{t.tags,jdbcType=INTEGER},#{t.songListStateId,jdbcType=INTEGER}
+  		)	
+  		
+  		-->
+  	</insert>
+  	
+  	<delete id="deleteSongList" >
+  		delete from t_song_list where SONG_LIST_ID = #{t.songListId,jdbcType=INTEGER} 
+  	</delete>
+  	
+  	<update id="updateSongList">
+  	
+  		update t_song_list t 
+  		<set>
+		   <include refid="updateSql"></include>
+		</set>
+		
+		where t.SONG_LIST_ID = #{t.songListId,jdbcType=INTEGER}
+  	</update>
+	  
+	    
+	<!--  根据用户ID来获取所有的收藏夹信息   -->
+	<select id="getgetSongListsByUserId" resultMap="SongListMap">
+		SELECT * FROM t_song_list WHERE song_list_id IN 
+		(SELECT song_list_id FROM t_user_with_song_list WHERE user_id = #{userId,jdbcType=INTEGER}  )
+	</select>
+		
+	
+
+</mapper>
