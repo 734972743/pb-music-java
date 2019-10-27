@@ -72,7 +72,7 @@ public class UserWithSongListController {
 		int data = 0;
 		try {
 			iSongListService.addSongList(songList);
-			int songListId = songList.getSongListId(); // 取主键ID
+			int songListId = songList.getSongListId(); // 取主键ID  
 
 			if (songListId > 0) {
 
