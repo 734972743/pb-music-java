@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pb.weixin.dao.IUserHistorySongDao">
+
+	<resultMap id="userHistorySongMap" type="com.pb.weixin.vo.UserHistorySong">
+	    <id column="UHS_ID" jdbcType="INTEGER" property="uhsId" />
+	    <result column="USER_ID" jdbcType="INTEGER" property="userId" />
+	    <result column="HISTORY_DATE" jdbcType="TIMESTAMP" property="historyDate" />
+	     
+	    <collection property="songs" ofType="com.pb.weixin.vo.Song" column="songId">
+	    	<id column="SONG_ID" jdbcType="INTEGER" property="songId" />
+		    <result column="SONG_NAME" jdbcType="VARCHAR" property="songName" />
+		    <result column="SINGER_ID" jdbcType="INTEGER" property="singerId" />
+		    <result column="CD_ID" jdbcType="INTEGER" property="cdId" />
+		    <result column="LANGUAGE" jdbcType="INTEGER" property="language" />
+		    <result column="PLAY_COUNT" jdbcType="INTEGER" property="playCount" />
+		    <result column="DOWNLOAD_COUNT" jdbcType="INTEGER" property="downloadCount" />
+		    <result column="COLLECTION_COUNT" jdbcType="INTEGER" property="collectionCount" />
+		    <result column="PUBLISH_DATE" jdbcType="DATE" property="publishDate" />
+		    <result column="SONG_URL" jdbcType="VARCHAR" property="songUrl" />
+		    <result column="CYRIC_URL" jdbcType="VARCHAR" property="cyricUrl" />
+		    <result column="IMG_URL" jdbcType="VARCHAR" property="imgUrl" />
+		    <result column="SONG_TIME" jdbcType="DATE" property="songTime" />
+		    <result column="TYPE_ID" jdbcType="INTEGER" property="typeId" />
+		    <result column="SONG_STATE_ID" jdbcType="INTEGER" property="songStateId" />
+	    </collection>
+	    
+	   
+
+	</resultMap> 
+	
+	<sql id="ColumnList" >
+        t.UHS_ID,t.USER_ID,t.SONG_ID,t.HISTORY_DATE
+    </sql>
+    
+    <sql id="queryByCondition">
+    	<where>
+        
+		    <if test="t != null and t.uhsId != null and t.uhsId != ''">
+		        and t.UHS_ID = #{t.uhsId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.userId != null  and t.userId != ''">
+		        and t.USER_ID = #{t.userId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.songId != null  and t.songId != ''">
+		        and t.SONG_ID = #{t.songId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.historyDate != null and t.historyDate != ''">
+		        and t.HISTORY_DATE = #{t.historyDate ,jdbcType=TIMESTAMP}
+		    </if>
+		 </where>
+  	</sql>
+	
+	<select id="queryTotalCount" resultType="int">
+		SELECT COUNT(1) FROM t_user_history_song t
+		
+		<include refid="queryByCondition"/>
+	</select>
+	
+	
+		
+    
+    <select id="queryListPage" resultMap="userHistorySongMap" >
+    
+        select <include refid="ColumnList"/> from t_user_history_song t
+       
+		 <include refid="queryByCondition"/>
+		 
+		 
+		 <!--  的值为0的时候，因为其数据类型为Integer，所以这个判断是为false的，就是说int类型的判断，Mybatis是认定0为''的，所以为false。 -->
+		 <if test="curPage != null and pageSize != null">
+		        limit #{curPage} ,#{pageSize}
+		 </if>
+    </select>
+
+
+
+    <select id="getSongsAll" resultMap="userHistorySongMap">
+        select * from t_user_history_song
+    </select>
+    
+    <select id="getSongsBy" resultMap="userHistorySongMap">
+        select * from t_user_history_song
+        <where>
+        	<if test="uhsId != null and uhsId != ''">
+        		and UHS_ID = #{uhsId,jdbcType=INTEGER}
+        	</if>
+        	<if test="userId != null and userId != ''">
+        		and USER_ID = #{userId,jdbcType=INTEGER}
+        	</if>
+        	<if test="songId != null and songId != ''">
+        		and SONG_ID = #{songId,jdbcType=INTEGER}
+        	</if>
+        	<if test="historyDate != null and historyDate != ''">
+        		and HISTORY_DATE = #{historyDate,jdbcType=TIMESTAMP}
+        	</if>
+        </where>
+    
+    </select>
+    
+    <!-- 根据用户ID来查询自己收听过的歌曲历史信息 
+    	查最新的100条数据
+    -->
+    
+    <select id="getUserHistorySongsByUserId" resultMap="userHistorySongMap">
+    	SELECT s.* , uhs.user_id, uhs.HISTORY_DATE FROM t_song s , t_user_history_song uhs 
+		WHERE s.song_id = uhs.SONG_ID AND uhs.user_id =  #{userId ,jdbcType=INTEGER} 
+		ORDER BY uhs.HISTORY_DATE DESC  LIMIT 100
+    </select>
+    
+    <!-- 根据用户ID来插入所听过的歌曲
+    jdbcType=TIMESTAMP 是日期带时分秒的
+    -->
+    
+    <insert id="addUserHistorySong">
+    	 INSERT INTO t_user_history_song (user_id,song_id,HISTORY_DATE) VALUES(
+    	  #{t.userId ,jdbcType=INTEGER}, #{t.songs[0].songId ,jdbcType=INTEGER},
+    	  #{t.historyDate ,jdbcType=TIMESTAMP}
+    	 )
+    	 
+    </insert>
+    
+    
+    <!-- 根据用户ID来清空他所有的历史记录
+    -->
+    <delete id="deleteAllHistorySongByUserId">
+    	delete from t_user_history_song where user_id = #{userId ,jdbcType=INTEGER} 
+    </delete>
+    
+    
+</mapper>

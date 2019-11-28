@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pb.weixin.dao.ISingerDao">
+
+	<resultMap id="singerMap" type="com.pb.weixin.vo.Singer">
+	    <id column="SONGER_ID" jdbcType="INTEGER" property="singerId" />
+	    <result column="SINGER_NAME" jdbcType="VARCHAR" property="singerName" />
+	    <result column="ACCESS_COUNT" jdbcType="INTEGER" property="accessCount" />
+	    <result column="COLLECTION_COUNT" jdbcType="INTEGER" property="collectionCount" />
+	    <result column="AREA_ID" jdbcType="INTEGER" property="areaId" />
+	    <result column="INTRODUCE" jdbcType="VARCHAR" property="introduce" />
+	    <result column="BIRTHDAY" jdbcType="TIMESTAMP" property="birthday" />
+	    <result column="SINGER_SEX" jdbcType="INTEGER" property="singerSex" />
+	    <result column="PHOTO_URL" jdbcType="VARCHAR" property="photoUrl" />
+	    <result column="DEBUT_DATE" jdbcType="TIMESTAMP" property="debutDate" />
+	    <result column="SINGER_STATE_ID" jdbcType="INTEGER" property="singerStateId" />
+	   
+	</resultMap> 
+	
+	<sql id="ColumnList" >
+        t.SONGER_ID,t.SINGER_NAME,t.ACCESS_COUNT,t.COLLECTION_COUNT,
+        t.AREA_ID,t.INTRODUCE,t.BIRTHDAY,t.SINGER_SEX,
+        t.PHOTO_URL,t.DEBUT_DATE,t.SINGER_STATE_ID
+    </sql>
+    
+    <sql id="queryByCondition">
+    	<where>
+        
+		    <if test="t != null and t.songerId != null and t.songerId != ''">
+		        and t.SONGER_ID = #{t.songerId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.singerName != null  and t.singerName != ''">
+		        and t.SINGER_NAME like CONCAT('%', #{t.singerName ,jdbcType=VARCHAR}, '%')
+		    </if>
+		    <if test="t != null and t.accessCount != null  and t.accessCount != ''">
+		        and t.ACCESS_COUNT = #{t.accessCount ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.collectionCount != null and t.collectionCount != ''">
+		        and t.COLLECTION_COUNT = #{t.collectionCount ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.areaId != null and t.areaId != ''">
+		        and t.AREA_ID = #{t.areaId ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.introduce != null and t.introduce != ''">
+		         t.INTRODUCE = #{t.introduce ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.birthday != null and t.birthday != ''">
+		        and t.BIRTHDAY = #{t.birthday ,jdbcType=TIMESTAMP}
+		    </if>
+		    <if test="t != null and t.singerSex != null and t.singerSex != ''">
+		       and  t.SINGER_SEX = #{t.singerSex ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.photoUrl != null and t.photoUrl != ''">
+		       and  t.PHOTO_URL = #{t.photoUrl ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.debutDate != null and t.debutDate != ''">
+		       and  t.DEBUT_DATE = #{t.debutDate ,jdbcType=TIMESTAMP}
+		    </if>
+		    <if test="t != null and t.singerStateId != null and t.singerStateId != ''">
+		       and  t.SINGER_STATE_ID = #{t.singerStateId ,jdbcType=INTEGER}
+		    </if>
+		    
+		 </where>
+  	</sql>
+  	
+	
+	<select id="queryTotalCount" resultType="int">
+		SELECT COUNT(1) FROM t_singer t
+		
+		<include refid="queryByCondition"/>
+	</select>
+	
+	<select id="getSingersBy" resultMap="singerMap">
+		SELECT <include refid="ColumnList"/> FROM t_singer t
+		
+		<include refid="queryByCondition"/>
+	</select>
+	
+	<!--  -->
+	<insert id="addSinger">
+		insert into t_singer t (t.SINGER_NAME,
+        t.INTRODUCE,t.SINGER_SEX,
+        t.PHOTO_URL) values (
+      
+        )
+	</insert>
+	
+	<insert id="addSingerName" useGeneratedKeys="true" keyColumn="SONGER_ID" keyProperty="t.singerId" parameterType="com.pb.weixin.vo.Singer">
+		insert into t_singer t (t.SINGER_NAME) values (
+        	#{t.singerName,jdbcType=VARCHAR}
+        )
+	</insert>
+	
+		
+   
+    
+    
+</mapper>

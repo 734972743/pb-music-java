@@ -25,7 +25,7 @@ public interface ISongDao extends BaseDao<Song> {
 	 * @param song
 	 * @return
 	 */
-	public int addSong(Song song);
+	public int addSong(@Param("t") Song song);
 	
 	/**
 	 * 修改一首音乐
@@ -45,6 +45,9 @@ public interface ISongDao extends BaseDao<Song> {
 	
 	//根据用户ID来查询自己收藏的歌曲信息
 	public List<Song> getCollectionSongByUserId(@Param("userId") int userId);
+	
+	//根据收藏夹ID来查询所有歌曲列表
+	public List<Song> getSongListBySongListId(@Param("songListId") int songListId);
 	
 	
 }

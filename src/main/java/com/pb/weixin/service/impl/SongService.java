@@ -52,6 +52,12 @@ public class SongService extends BaseService<Song> implements ISongService {
 		return songDao.getCollectionSongByUserId(userId);
 	}
 
+	@Override
+	public List<Song> getSongListBySongListId(int songListId) {
+		// TODO Auto-generated method stub
+		return songDao.getSongListBySongListId(songListId);
+	}
+
 
 	
 

@@ -44,4 +44,7 @@ public interface ISongService extends IBaseService<Song> {
 	
 	//根据用户ID来查询自己收藏的歌曲信息
 	public List<Song> getCollectionSongByUserId(int userId);
+	
+	//根据收藏夹ID来查询所有歌曲列表
+	public List<Song> getSongListBySongListId(@Param("songListId") int songListId);
 }

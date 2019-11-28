@@ -63,11 +63,16 @@
 		       and  t.CYRIC_URL = #{t.cyricUrl ,jdbcType=VARCHAR}
 		    </if>
 		    <if test="t != null and t.songTime != null and t.songTime != ''">
-		         t.SONG_TIME = #{t.songTime ,jdbcType=INTEGER}
+		       and  t.SONG_TIME = #{t.songTime ,jdbcType=INTEGER}
 		    </if>
-		    <if test="t != null and t.typeId != null and t.typeId != ''">
-		       and  t.TYPE_ID = #{t.typeId ,jdbcType=INTEGER}
-		    </if>
+		    
+		   	<if test="t != null and t.searchTypeIds != null and t.searchTypeIds.size != 0">
+			    and t.TYPE_ID in 
+	       		<foreach collection="t.searchTypeIds" item="item" open="(" separator="," close=")" >
+	        		#{item}
+	        	</foreach>
+        	</if>
+		    
 		    <if test="t != null and t.songStateId != null and t.songStateId != ''">
 		       and  t.SONG_STATE_ID = #{t.songStateId ,jdbcType=INTEGER}
 		    </if>
@@ -141,9 +146,14 @@
         	<if test="songTime != null and songTime != ''">
         		and SONG_TIME = #{songTime,jdbcType=VARCHAR}
         	</if>
-        	<if test="typeId != null and typeId != ''">
-        		and TYPE_ID = #{typeId,jdbcType=INTEGER}
-        	</if>
+        	
+       		and TYPE_ID in 
+       		<foreach collection="searchTypeIds ! =null" item="typeId" open="(" separator="," close=")">
+        		#{typeId,jdbcType=INTEGER}
+        	</foreach>
+        
+        	
+     
         	<if test="songStateId != null and songStateId != ''">
         		and SONG_STATE_ID = #{songStateId,jdbcType=INTEGER}
         	</if>
@@ -158,6 +168,24 @@
     	 (SELECT t1.song_id FROM t_song_list_with_song t1 WHERE song_list_id in 
     	  (SELECT song_list_id FROM t_user_with_song_list WHERE user_id = #{userId, jdbcType=INTEGER} ) )
     </select>
+    
+    <!-- 根据收藏夹ID来查询所有歌曲列表-->
+   	<select id="getSongListBySongListId" resultMap="songMap">
+   		SELECT s.* FROM t_song s WHERE s.song_id  IN 
+   		 ( SELECT song_id FROM t_song_list_with_song WHERE  song_list_id = #{songListId, jdbcType=INTEGER} ) 
+   	
+   	</select>
+   	
+   	<insert id="addSong">
+   		insert into t_song (SONG_NAME,TYPE_ID,IMG_URL,SONG_URL) values (
+   		#{t.songListId, jdbcType=VARCHAR},
+   		#{t.typeId, jdbcType=INTEGER},
+   		#{t.imgUrl, jdbcType=VARCHAR},
+   		#{t.songUrl, jdbcType=VARCHAR}
+   		)
+   	</insert>
+    
+    
     
     
 </mapper>

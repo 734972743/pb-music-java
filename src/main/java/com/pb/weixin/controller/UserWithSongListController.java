@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mysql.fabric.xmlrpc.base.Data;
 import com.pb.weixin.service.ISongListService;
+import com.pb.weixin.service.ISongListWithSongService;
 import com.pb.weixin.service.IUserWithSongListService;
 import com.pb.weixin.utils.BaseResult;
 import com.pb.weixin.utils.DateFormatUtil;
 import com.pb.weixin.utils.Page;
 import com.pb.weixin.vo.SongList;
+import com.pb.weixin.vo.SongListWithSong;
 import com.pb.weixin.vo.UserWithSongList;
 
 @RestController
@@ -33,6 +35,9 @@ public class UserWithSongListController {
 
 	@Autowired
 	private ISongListService iSongListService;
+	
+	@Autowired
+	private ISongListWithSongService iSongListWithSongService;
 
 	// 根据条件查询并带分页效果
 	@RequestMapping(value = "/getUserWithSongListsBy", method = RequestMethod.POST)
@@ -113,24 +118,30 @@ public class UserWithSongListController {
 	@RequestMapping(value = "/deleteUserWithSongList/{songListId}/{userId}", method = RequestMethod.DELETE)
 	public BaseResult<Integer> deleteUserWithSongList(@PathVariable("songListId") int songListId, @PathVariable("userId") int userId) {
 		BaseResult<Integer> result = new BaseResult<Integer>();
-		SongList songList = new SongList();
-		songList.setSongListId(songListId);
 		
-		
-		UserWithSongList userWithSongList = new UserWithSongList();
-		userWithSongList.setUserId(userId);
-		userWithSongList.setSongListId(songListId);
 		// 返回结果的ID
 		int data1 = 0;
 		int data2 = 0;
+		int data3 = 0;
 		try {
 
-				//先删除字表
+			//先删除歌曲收藏表的数据
+			SongList songList = new SongList();
+			songList.setSongListId(songListId);
 			data1 = iSongListService.deleteSongList(songList);
 			
+			//再删除歌曲列表和用户表的中间表的数据
+			UserWithSongList userWithSongList = new UserWithSongList();
+			userWithSongList.setUserId(userId);
+			userWithSongList.setSongListId(songListId);
 			data2 = iUserWithSongListService.deleteUserWithSongList(userWithSongList);
-
-			if (data1 > 0 && data2 > 0) {
+			
+			//再删除歌曲列表和歌曲表的中间表的数据
+			SongListWithSong songListWithSong = new SongListWithSong();
+			songListWithSong.setSongListId(songListId);
+			data3= iSongListWithSongService.deleteSongListWithSong(songListWithSong);
+			
+			if (data1 > 0 && data2 > 0 && data3 >0) {
 				result.setCode(200);
 				result.setMessage("删除成功");
 			} else {
