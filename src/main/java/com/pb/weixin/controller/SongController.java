@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pb.weixin.exception.MyException;
 import com.pb.weixin.service.ISingerService;
 import com.pb.weixin.service.ISongService;
 import com.pb.weixin.utils.BaseResult;
@@ -52,6 +53,7 @@ public class SongController {
 	@RequestMapping(value="/queryListPage/{curPage}/{pageSize}", method=RequestMethod.POST)
 	public BaseResult<List<Song>> queryListPage(@PathVariable("curPage") int curPage, @PathVariable("pageSize")int pageSize, @RequestBody Song song){
 		Page page = new Page(curPage,pageSize);
+		
 		BaseResult<List<Song>> result = new BaseResult<List<Song>>();
 		
 		result = (BaseResult<List<Song>>) songService.queryListPage(page,song);

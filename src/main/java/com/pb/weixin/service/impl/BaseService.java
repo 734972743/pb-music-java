@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.pb.weixin.dao.BaseDao;
+import com.pb.weixin.exception.MyException;
 import com.pb.weixin.utils.BaseResult;
 import com.pb.weixin.utils.Page;
 import com.pb.weixin.vo.Song;
@@ -26,6 +27,10 @@ public class BaseService<T> {
     
     //上面的方法就不需要调用，只需要调用下面的方法
     public BaseResult<List<T>> queryListPage(Page page,T t){
+    	if(t == null) {
+			throw new MyException("参数为空");
+		}
+    	
     	BaseResult<List<T>> result = new BaseResult<List<T>>();
         page = this.queryTotalCount(page,t);
         

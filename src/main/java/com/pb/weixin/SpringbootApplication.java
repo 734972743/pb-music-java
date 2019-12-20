@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
+import com.pb.weixin.log.log;
+
 //import com.pb.weixin.log.JuliaLog;
 
 
@@ -36,6 +38,7 @@ public class SpringbootApplication extends SpringBootServletInitializer {
 		long time = (endTime - startTime) / 1000 ;
 		
 		//JuliaLog.showLog();
+		log.show();
 		//System.out.println();
 		
 		System.out.println("          ---------  Spring Boot 已启动     ----------              ");
