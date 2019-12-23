@@ -140,8 +140,15 @@
     </select>
     
     <insert id="saveUser" parameterType="com.pb.weixin.vo.User">
-    	insert into t_user(LOGIN_ID,PASSWORD,USER_NAME,USER_SEX) values (#{loginId,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
-    	#{userName,jdbcType=VARCHAR},#{userSex,jdbcType=INTEGER})
+    	insert into t_user(LOGIN_ID,PASSWORD,USER_NAME,USER_SEX, EMAIL,PHONE,USER_TYPE,SIGN,HEAD_SCULPTURE_URL,REGISTATION_DATE,USER_STATE_ID) values (#{loginId,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
+    	#{userName,jdbcType=VARCHAR},#{userSex,jdbcType=INTEGER},
+    	#{email,jdbcType=VARCHAR},
+    	#{phone,jdbcType=VARCHAR},
+    	#{userType,jdbcType=INTEGER},
+    	#{sign,jdbcType=VARCHAR},
+    	#{headSculptureUrl,jdbcType=VARCHAR},
+    	#{registationDate,jdbcType=TIMESTAMP},
+    	#{userStateId,jdbcType=INTEGER} )
     </insert>
     
     <!-- 动态修改 -->
