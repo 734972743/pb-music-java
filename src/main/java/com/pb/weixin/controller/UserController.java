@@ -88,26 +88,27 @@ public class UserController {
 	public BaseResult<User> register(@RequestBody User user){
 		BaseResult<User> result  = new BaseResult<User>();
 		
-		user.setRegistationDate(new Date("yyyy-MM-dd HH:mm:ss"));
-		user.setUserStateId(0); 
+		//"yyyy-MM-dd HH:mm:ss"
+		user.setRegistationDate(new Date());
+		
 		int i = 0;
 		 try {
 			i = userSerivce.saveUser(user);
 			if(i>0) {
-				result.setFlag(true);
+				result.setCode(200);
 				result.setMessage("注册成功");
 				//再根据注册的账号和密码查找该用户信息
 				User data = userSerivce.getUserByLoginIdAndPassword(user.getLoginId(), user.getPassword());
 				result.setData(data);
 			}else {
-				result.setFlag(false);
+				result.setCode(500);
 				result.setMessage("注册失败");
 				result.setData(null);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			result.setFlag(false);
+			result.setCode(500);
 			result.setMessage("注册失败");
 			result.setData(null);
 		}

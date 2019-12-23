@@ -2,6 +2,8 @@ package com.pb.weixin.vo;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class User {
 
 	private Integer userId;   //用户编号
@@ -14,6 +16,9 @@ public class User {
 	private Integer userType;       //用户类型编号，默认0; 0:普通用户，1.vip，2.后台管理员admin
 	private String sign;         //个人签名
 	private String headSculptureUrl;    //用户头像图片链接地址
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	//@JSONField(format="yyyy/MM/dd")
 	private Date registationDate;      //注册日期  类型TIMESTAMP（包括年月日，时分秒）
 	private Integer userStateId ;      //用户状态信息编号（可拓展字段）默认0;0未激活状态（需要邮箱激活）1激活状态  2注销状态（账号废弃）
 	

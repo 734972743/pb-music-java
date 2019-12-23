@@ -147,11 +147,12 @@
         		and SONG_TIME = #{songTime,jdbcType=VARCHAR}
         	</if>
         	
-       		and TYPE_ID in 
-       		<foreach collection="searchTypeIds ! =null" item="typeId" open="(" separator="," close=")">
-        		#{typeId,jdbcType=INTEGER}
-        	</foreach>
-        
+        	<if test="searchTypeIds != null and searchTypeIds != ''">
+	       		and TYPE_ID in 
+	       		<foreach collection="searchTypeIds ! =null" item="typeId" open="(" separator="," close=")">
+	        		#{typeId,jdbcType=INTEGER}
+	        	</foreach>
+        	</if>
         	
      
         	<if test="songStateId != null and songStateId != ''">
