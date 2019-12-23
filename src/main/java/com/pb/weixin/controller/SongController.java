@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pb.weixin.exception.MyException;
+
 import com.pb.weixin.service.ISingerService;
 import com.pb.weixin.service.ISongService;
 import com.pb.weixin.utils.BaseResult;
