@@ -12,8 +12,8 @@ public class StsServiceSample {
 
 	 public static void main(String[] args) {
 	        String endpoint = "sts.aliyuncs.com";
-	        String accessKeyId = "LTAI4FvYEZDSMScaUFbmoo5y";
-	        String accessKeySecret = "8IEjEEe3FboF2q5eEfr8NSkWMbBTZM";
+	        String accessKeyId = "LTAI4GC82qmbXrEdSmrkWKkM";
+	        String accessKeySecret = "quBoezD11bcghnuntxWQVX4KJWRIPu";
 	        String roleArn = "acs:ram::1400206564660838:role/ramosstest";
 	       // String roleArn = "RamOssTest";
 	        String roleSessionName = "AliyunOSSFullAccess1";

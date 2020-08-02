@@ -26,19 +26,29 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.BucketInfo;
+import com.aliyun.oss.model.ListObjectsRequest;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.OSSObjectSummary;
 import com.aliyun.oss.model.ObjectListing;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
+
+@PropertySource("classpath:application.properties")
+@Component
 public class HelloOSS2 {
     static Logger logger = Logger.getLogger(HelloOSS2.class);
    
@@ -53,10 +63,24 @@ public class HelloOSS2 {
     // accessKeyId和accessKeySecret是OSS的访问密钥，您可以在控制台上创建和查看，
     // 创建和查看访问密钥的链接地址是：https://ak-console.aliyun.com/#/。
     // 注意：accessKeyId和accessKeySecret前后都没有空格，从控制台复制时请检查并去除多余的空格。
-    private static String accessKeyId = "LTAI4FvYEZDSMScaUFbmoo5y";
-    private static String accessKeySecret = "8IEjEEe3FboF2q5eEfr8NSkWMbBTZM";
+    
+    
+    private static String accessKeyId ;
+    
+    private static String accessKeySecret ;
+    
+    
+    @Value("${aliyun.oss.accessKeyId}")
+    public void setAccessKeyId(String accessKeyId) {
+		HelloOSS2.accessKeyId = accessKeyId;
+	}
+    
+    @Value("${aliyun.oss.accessKeySecret}")
+	public void setAccessKeySecret(String accessKeySecret) {
+		HelloOSS2.accessKeySecret = accessKeySecret;
+	}
 
-    // Bucket用来管理所存储Object的存储空间，详细描述请参看“开发人员指南 > 基本概念 > OSS基本概念介绍”。
+	// Bucket用来管理所存储Object的存储空间，详细描述请参看“开发人员指南 > 基本概念 > OSS基本概念介绍”。
     // Bucket命名规范如下：只能包括小写字母，数字和短横线（-），必须以小写字母或者数字开头，长度必须在3-63字节之间。
     private static String bucketName = "pb-20191014";
 
@@ -75,7 +99,7 @@ public class HelloOSS2 {
 
         // 生成OSSClient，您可以指定一些参数，详见“SDK手册 > Java-SDK > 初始化”，
         // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/init.html?spm=5176.docoss/sdk/java-sdk/get-start
-        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+        OSSClient ossClient = new OSSClient(endpoint, HelloOSS2.accessKeyId, HelloOSS2.accessKeySecret);
 
         try {
         	//2.判断bucketName库是否创建
@@ -134,13 +158,52 @@ public class HelloOSS2 {
             //5.这个是查看oos库里面所有的文件
             // 查看Bucket中的Object。详细请参看“SDK手册 > Java-SDK > 管理文件”。
             // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/manage_object.html?spm=5176.docoss/sdk/java-sdk/manage_bucket
-            ObjectListing objectListing = ossClient.listObjects(bucketName);
-            List<OSSObjectSummary> objectSummary = objectListing.getObjectSummaries();
-            System.out.println("您有以下Object：");
-            for (OSSObjectSummary object : objectSummary) {
-                System.out.println("\t" + object.getKey());
-            }
+           // ObjectListing objectListing = ossClient.listObjects(bucketName);
+            
+            
+            String maker = "";
+            boolean flag = true;
+            
+            List<OSSObjectSummary> data = new ArrayList<OSSObjectSummary>();
+            do {
+            	 ListObjectsRequest listObjectsRequest = new ListObjectsRequest(bucketName);
+                 listObjectsRequest.setPrefix("resources/audio/music/");//指定下一级文件
+                 listObjectsRequest.setMarker(maker);  //获取下一页的起始点，它的下一项
+                 listObjectsRequest.setMaxKeys(100); //设置分页的页容量
+                 listObjectsRequest.setDelimiter("/");//跳出递归循环，只去指定目录下的文件。使用它时 Prefix文件路径要以“/”结尾
+                 ObjectListing objectListing = ossClient.listObjects(listObjectsRequest);
 
+               //  Console.WriteLine("List objects succeeded");
+                 
+                 
+             
+                 List<OSSObjectSummary> objectSummary = objectListing.getObjectSummaries();
+                 
+                
+                 System.out.println("您有以下Object：");
+                 for (OSSObjectSummary object : objectSummary) {
+                 	//before()或者after()方法的返回值为boolean类型
+                 	Date lastModiyDate = object.getLastModified();
+                 	
+                 	String nowSr = "2020-05-14 00:00:00";
+
+                 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                 	Date now = format.parse(nowSr);
+                 	
+                 	if(lastModiyDate.after(now)) {
+                 		data.add(object);
+                 	}
+                 	 maker = objectListing.getNextMarker();
+                    // System.out.println("\t" + object.getKey());
+                 }
+                 flag = objectListing.isTruncated();   //全部执行完后，为false
+            }while(flag);
+           
+            
+            for (OSSObjectSummary object : data) {
+            	System.out.println("\t" + object.getKey());
+            }
+            
           //6.从oss库里面删除文件
             // 删除Object。详细请参看“SDK手册 > Java-SDK > 管理文件”。
             // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/manage_object.html?spm=5176.docoss/sdk/java-sdk/manage_bucket

@@ -108,6 +108,13 @@
 		ORDER BY uhs.HISTORY_DATE DESC  LIMIT 100
     </select>
     
+    
+    
+    <select id="getUserHistorySongByUserIdAndSongId" resultMap="userHistorySongMap">
+    	SELECT * FROM t_user_history_song WHERE user_Id = #{userId ,jdbcType=INTEGER} 
+    	AND song_id = #{songId ,jdbcType=INTEGER}
+    </select>
+    
     <!-- 根据用户ID来插入所听过的歌曲
     jdbcType=TIMESTAMP 是日期带时分秒的
     -->
@@ -126,6 +133,13 @@
     <delete id="deleteAllHistorySongByUserId">
     	delete from t_user_history_song where user_id = #{userId ,jdbcType=INTEGER} 
     </delete>
+    
+    
+    <update id="updateHistorySongByUhsId">
+    	UPDATE t_user_history_song t SET t.HISTORY_DATE = #{historyDate ,jdbcType=TIMESTAMP} 
+		WHERE t.UHS_ID = #{uhsId ,jdbcType=INTEGER}  
+    
+    </update>
     
     
 </mapper>

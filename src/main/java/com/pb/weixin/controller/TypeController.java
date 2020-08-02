@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pb.weixin.service.ITypeService;
@@ -26,9 +27,25 @@ public class TypeController {
 	public BaseResult<List<Type>> getTypesAll() {
 		BaseResult<List<Type>> result = new BaseResult<List<Type>>();
 		try {
-			List<Type> songs = typeService.getTypesAll();
+			List<Type> types = typeService.getTypesAll();
 			result.setCode(200);
-			result.setData(songs);
+			result.setData(types);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result.setCode(500);
+			result.setData(null);
+		}
+		return result;
+	}
+	
+	@RequestMapping(value="/getTypesBy", method=RequestMethod.POST)
+	public BaseResult<List<Type>> getTypesBy(@RequestBody Type param) {
+		BaseResult<List<Type>> result = new BaseResult<List<Type>>();
+		try {
+			List<Type> types = typeService.getTypesBy(param);
+			result.setCode(200);
+			result.setData(types);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

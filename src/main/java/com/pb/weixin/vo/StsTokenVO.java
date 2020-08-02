@@ -2,16 +2,20 @@ package com.pb.weixin.vo;
 
 import java.io.Serializable;
 
+import org.springframework.beans.factory.annotation.Value;
+
 public class StsTokenVO implements Serializable {
 
 	
 	 /**
      * 访问密钥标识
      */
+	@Value("${aliyun.oss.accessKeyId}")
     private String accessKeyId;
     /**
      * 访问密钥
      */
+	@Value("${aliyun.oss.accessKeySecret}")
     private String accessKeySecret;
     /**
      * 安全令牌

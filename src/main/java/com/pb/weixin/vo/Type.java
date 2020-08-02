@@ -1,14 +1,19 @@
 package com.pb.weixin.vo;
 
-public class Type {
+import java.io.Serializable;
 
-	private int typeId;
-	private String typeName;
+public class Type implements Serializable{
+
+	private Integer typeId;     //id
+	private String typeName;    //类型名称
+    private Integer fatherTypeId;   //父类类型ID
+    private String fatherTypeName;   //父类类型名称
 	
-	public int getTypeId() {
+	
+	public Integer getTypeId() {
 		return typeId;
 	}
-	public void setTypeId(int typeId) {
+	public void setTypeId(Integer typeId) {
 		this.typeId = typeId;
 	}
 	public String getTypeName() {
@@ -17,5 +22,19 @@ public class Type {
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
 	}
+	public Integer getFatherTypeId() {
+		return fatherTypeId;
+	}
+	public void setFatherTypeId(Integer fatherTypeId) {
+		this.fatherTypeId = fatherTypeId;
+	}
+	public String getFatherTypeName() {
+		return fatherTypeName;
+	}
+	public void setFatherTypeName(String fatherTypeName) {
+		this.fatherTypeName = fatherTypeName;
+	}
+	
+	
 	
 }

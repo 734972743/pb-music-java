@@ -1,10 +1,11 @@
 package com.pb.weixin.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 //用户收听音乐
-public class UserHistorySong {
+public class UserHistorySong implements Serializable{
 
 	private Integer uhsId ;   //主键ID
 	private Integer userId;  //用户ID

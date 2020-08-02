@@ -54,15 +54,28 @@ public class UserHistorySongController {
 		public BaseResult<Integer> addUserHistorySong(@RequestBody UserHistorySong userHistorySong){
 			BaseResult<Integer> result = new BaseResult<Integer>();
 			try {
-				userHistorySong.setHistoryDate(new Date());
-				int data = userHistorySongService.addUserHistorySong(userHistorySong);
-				if(data > 0) {
-					result.setCode(200);
-					result.setData(data);
+				
+				//先判断是否最近一次已经收听了改歌曲
+				UserHistorySong uhs = userHistorySongService.getUserHistorySongByUserIdAndSongId(userHistorySong);
+				if(uhs == null) {
+					userHistorySong.setHistoryDate(new Date());
+					int data = userHistorySongService.addUserHistorySong(userHistorySong);
+					
+					if(data > 0) {
+						result.setCode(200);
+						result.setData(data);
+					}else {
+						result.setCode(500);
+						result.setData(null);
+					}
 				}else {
-					result.setCode(500);
-					result.setData(null);
+					//更新时间
+					uhs.setHistoryDate(new Date());
+					userHistorySongService.updateHistorySongByUhsId(uhs);
+					result.setCode(200);
+					result.setData(2);  //随便写个值
 				}
+			
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

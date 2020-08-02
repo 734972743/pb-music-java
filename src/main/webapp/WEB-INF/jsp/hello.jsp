@@ -8,5 +8,12 @@
 	<body>
 		<h1> 我是hello  </h1>
 		<p>${himsg}</p>
+		nihao  Cloud Toolkit<br/>
+		2020/2/17 <br>
+		hello<br>
+		${test }
+		
+	
+		
 	</body>
 </html>

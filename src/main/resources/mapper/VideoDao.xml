@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pb.weixin.dao.IVideoDao">
+
+	<resultMap id="videoMap" type="com.pb.weixin.vo.Video">
+	    <id column="id" jdbcType="INTEGER" property="id" />
+	    <result column="video_name" jdbcType="VARCHAR" property="videoName" />
+	    <result column="video_url" jdbcType="VARCHAR" property="videoUrl" />
+	    <result column="video_image_url" jdbcType="VARCHAR" property="videoImageUrl" />
+	    <result column="video_source" jdbcType="VARCHAR" property="videoSource" />
+	    <result column="video_introduce" jdbcType="VARCHAR" property="videoIntroduce" />
+	    <result column="video_type" jdbcType="INTEGER" property="videoType" />
+	    <result column="create_date" jdbcType="DATE" property="createDate" />
+	   
+	</resultMap> 
+	
+	<sql id="ColumnList" >
+        t.id,t.video_name,t.video_url,t.video_image_url,
+        t.video_source,t.video_introduce,t.video_type,t.create_date
+    </sql>
+    
+    <sql id="queryByCondition">
+    	<where>
+        
+		    <if test="t != null and t.id != null and t.id != ''">
+		        and t.id = #{t.id ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.videoName != null  and t.videoName != ''">
+		        and t.video_name like CONCAT('%', #{t.videoName ,jdbcType=VARCHAR}, '%')
+		    </if>
+		    <if test="t != null and t.videoUrl != null  and t.videoUrl != ''">
+		        and t.video_url = #{t.videoUrl ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.videoImageUrl != null and t.videoImageUrl != ''">
+		        and t.video_image_url = #{t.videoImageUrl ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.videoSource != null and t.videoSource != ''">
+		        and t.video_source = #{t.videoSource ,jdbcType=VARCHAR}
+		    </if>
+		    <if test="t != null and t.videoIntroduce != null and t.videoIntroduce != ''">
+		         t.video_introduce = #{t.videoIntroduce ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.videoType != null and t.videoType != ''">
+		        and t.video_type = #{t.videoType ,jdbcType=INTEGER}
+		    </if>
+		    <if test="t != null and t.createDate != null and t.createDate != ''">
+		       and  t.create_date = #{t.createDate ,jdbcType=INTEGER}
+		    </if>
+		    
+		 </where>
+		 
+		 <if test="t != null and t.isSort == 0">
+		       order by t.create_date asc
+	    </if>
+	    
+	    <if test="t != null and t.isSort == 1">
+	       order by t.create_date desc
+	    </if>
+  	</sql>
+	
+	<select id="queryTotalCount" resultType="int">
+		SELECT COUNT(1) FROM t_video t
+		
+		<include refid="queryByCondition"/>
+	</select>
+	
+	
+		
+    
+    <select id="queryListPage" resultMap="videoMap" >
+    
+        select <include refid="ColumnList"/> from t_video t
+       
+		 <include refid="queryByCondition"/>
+		 
+		 
+		 <!--  的值为0的时候，因为其数据类型为Integer，所以这个判断是为false的，就是说int类型的判断，Mybatis是认定0为''的，所以为false。 -->
+		 <if test="curPage != null and pageSize != null">
+		        limit #{curPage} ,#{pageSize}
+		 </if>
+    </select>
+    
+    <select id="getVideosBy" resultMap="videoMap">
+          select <include refid="ColumnList"/> from t_video t
+       
+		 <include refid="queryByCondition"/>
+    </select>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- 根据用户ID来查询自己收藏的歌曲信息 -->
+    
+    <select id="getCollectionSongByUserId" resultMap="videoMap">
+    	SELECT * FROM t_song  WHERE song_id IN 
+    	 (SELECT t1.song_id FROM t_song_list_with_song t1 WHERE song_list_id in 
+    	  (SELECT song_list_id FROM t_user_with_song_list WHERE user_id = #{userId, jdbcType=INTEGER} ) )
+    </select>
+    
+    <!-- 根据收藏夹ID来查询所有歌曲列表-->
+   	<select id="getSongListBySongListId" resultMap="videoMap">
+   		SELECT s.* FROM t_song s WHERE s.song_id  IN 
+   		 ( SELECT song_id FROM t_song_list_with_song WHERE  song_list_id = #{songListId, jdbcType=INTEGER} ) 
+   	
+   	</select>
+   	
+   	<insert id="addSong">
+   		insert into t_song (SONG_NAME,TYPE_ID,IMG_URL,SONG_URL) values (
+   		#{t.songListId, jdbcType=VARCHAR},
+   		#{t.typeId, jdbcType=INTEGER},
+   		#{t.imgUrl, jdbcType=VARCHAR},
+   		#{t.songUrl, jdbcType=VARCHAR}
+   		)
+   	</insert>
+    
+    
+    
+    
+</mapper>

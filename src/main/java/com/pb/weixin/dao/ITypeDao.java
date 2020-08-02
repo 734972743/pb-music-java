@@ -2,6 +2,8 @@ package com.pb.weixin.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.pb.weixin.vo.Type;
 
 public interface ITypeDao extends BaseDao<Type> {
@@ -16,21 +18,21 @@ public interface ITypeDao extends BaseDao<Type> {
 	 * 根据条件来查询音乐
 	 * @return
 	 */
-	public List<Type> getTypesBy(Type type);
+	public List<Type> getTypesBy(@Param("t") Type type);
 	
 	/**
 	 * 增加一首音乐
 	 * @param song
 	 * @return
 	 */
-	public int addType(Type type);
+	public int addType(@Param("t") Type type);
 	
 	/**
 	 * 修改一首音乐
 	 * @param song
 	 * @return
 	 */
-	public int updateType(Type type);
+	public int updateType(@Param("t") Type type);
 	
 	
 	/**

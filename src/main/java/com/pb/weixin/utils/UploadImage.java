@@ -10,6 +10,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
@@ -19,6 +22,8 @@ import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.OSSObjectSummary;
 import com.aliyun.oss.model.ObjectListing;
 
+@PropertySource("classpath:application.properties")
+@Component
 public class UploadImage {
 
 	static Logger logger = Logger.getLogger(UploadImage.class);
@@ -34,8 +39,22 @@ public class UploadImage {
 	// accessKeyId和accessKeySecret是OSS的访问密钥，您可以在控制台上创建和查看，
 	// 创建和查看访问密钥的链接地址是：https://ak-console.aliyun.com/#/。
 	// 注意：accessKeyId和accessKeySecret前后都没有空格，从控制台复制时请检查并去除多余的空格。
-	private static String accessKeyId = "LTAI4FvYEZDSMScaUFbmoo5y";
-	private static String accessKeySecret = "8IEjEEe3FboF2q5eEfr8NSkWMbBTZM";
+	
+	
+	private static String accessKeyId ;
+	
+	private static String accessKeySecret;
+	
+	@Value("${aliyun.oss.accessKeyId}")
+	public void setAccessKeyId(String accessKeyId) {
+		UploadImage.accessKeyId = accessKeyId;
+	}
+	
+	@Value("${aliyun.oss.accessKeySecret}")
+	public void setAccessKeySecret(String accessKeySecret) {
+		UploadImage.accessKeySecret = accessKeySecret;
+	}
+
 
 	// Bucket用来管理所存储Object的存储空间，详细描述请参看“开发人员指南 > 基本概念 > OSS基本概念介绍”。
 	// Bucket命名规范如下：只能包括小写字母，数字和短横线（-），必须以小写字母或者数字开头，长度必须在3-63字节之间。
@@ -46,6 +65,8 @@ public class UploadImage {
 	// Object其实就是你要创建的文件的名称 ，注意要带上文件的后缀名
 	// private static String firstKey = "pbObj.txt";
 
+	
+//	@Scheduled(initialDelay=1000,fixedDelay=1000*100)
 	public static void main(String[] args) {
 		uploadImage();
 	}
@@ -59,7 +80,7 @@ public class UploadImage {
 
 		// 生成OSSClient，您可以指定一些参数，详见“SDK手册 > Java-SDK > 初始化”，
 		// 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/init.html?spm=5176.docoss/sdk/java-sdk/get-start
-		OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+		OSSClient ossClient = new OSSClient(endpoint, UploadImage.accessKeyId, UploadImage.accessKeySecret);
 
 		try {
 			// 2.判断bucketName库是否创建

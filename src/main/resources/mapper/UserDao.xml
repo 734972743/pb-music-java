@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.pb.weixin.dao.IUserDao">
+
+	<!-- 开启二级缓存  ，当前namespace 下所有的查询都会走缓存
+	eviction:表示是缓存策略存哪里？ 是硬盘还是内存
+	flushInterval:周期刷新频率： 600000毫秒（60秒）  就是每60秒刷新一次缓存
+	size: 内存大小512
+	readOnly 是否只读
+	-->
+	<cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true">
+	
+	</cache>
 
 	<resultMap id="userMap" type="com.pb.weixin.vo.User">
 	    <id column="USER_ID" jdbcType="INTEGER" property="userId" />
@@ -17,7 +28,7 @@
 	    <result column="USER_STATE_ID" jdbcType="INTEGER" property="userStateId" />
 	</resultMap> 
 
-    <select id="getUsers" resultMap="userMap">
+    <select id="getUsers" resultMap="userMap" useCache="false">
         select * from t_user t <include refid="queryByCondition"></include>
     </select>
     
@@ -38,7 +49,7 @@
 		    </if>
 		   
 		    <if test="t != null and t.loginId != null and t.loginId != ''">
-		        AND loginId = #{t.loginId ,jdbcType=VARCHAR}
+		        AND LOGIN_ID = #{t.loginId ,jdbcType=VARCHAR}
 		    </if>
 		    
 		    <if test="t != null and t.password != null and t.password != ''">
@@ -195,5 +206,12 @@
     <delete id="deleteUserById">
     	delete from t_user from USER_ID=#{userId}
     </delete>
+    
+    <select id="getUsersByIds" resultMap="userMap">
+    	SELECT * FROM t_user WHERE user_id IN
+    	<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+    		#{item}
+    	</foreach>
+    </select>
    
 </mapper>

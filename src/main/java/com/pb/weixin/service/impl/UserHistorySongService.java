@@ -36,6 +36,23 @@ public class UserHistorySongService extends BaseService<UserHistorySong> impleme
 		// TODO Auto-generated method stub
 		return userHistorySongDao.deleteAllHistorySongByUserId(userId);
 	}
+
+	@Override
+	public UserHistorySong getUserHistorySongByUserIdAndSongId(UserHistorySong t) {
+		// TODO Auto-generated method stub
+		List<UserHistorySong> userHistorySongs = userHistorySongDao.getUserHistorySongByUserIdAndSongId(t.getUserId(), t.getSongs().get(0).getSongId());
+		if(userHistorySongs.size()>0) {
+			return userHistorySongs.get(0);
+		}else {
+			return null;
+		}
+	}
+
+	@Override
+	public int updateHistorySongByUhsId(UserHistorySong t) {
+		// TODO Auto-generated method stub
+		return userHistorySongDao.updateHistorySongByUhsId(t.getHistoryDate(), t.getUhsId());
+	}
 	
 
 

@@ -3,6 +3,7 @@ package com.pb.weixin.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.pb.weixin.dao.IUserDao;
@@ -57,5 +58,10 @@ public class UserService implements IUserService {
 		return userDao.getByLoginId(loginId);
 	}
 
+	
+	//根据用户ID来获取所有的用户信息
+	public List<User> getUsersByIds(List<Integer> userIds){
+		return userDao.getUsersByIds(userIds);
+	}
 	
 }

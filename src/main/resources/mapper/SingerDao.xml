@@ -15,6 +15,7 @@
 	    <result column="DEBUT_DATE" jdbcType="TIMESTAMP" property="debutDate" />
 	    <result column="SINGER_STATE_ID" jdbcType="INTEGER" property="singerStateId" />
 	   
+	   
 	</resultMap> 
 	
 	<sql id="ColumnList" >

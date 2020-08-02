@@ -9,6 +9,7 @@ public class BaseResult<T>  {
 	public boolean flag;  //操作是否成功 ，成功为true， 失败为false
 	public String message;    //返回的提示信息
 	public Page page; //分页信息
+	public Object obj;   //这个用来存放其他额外的数据
 	
 	
 	public int getCode() {
@@ -45,6 +46,12 @@ public class BaseResult<T>  {
 	}
 	public void setPage(Page page) {
 		this.page = page;
+	}
+	public Object getObj() {
+		return obj;
+	}
+	public void setObj(Object obj) {
+		this.obj = obj;
 	}
 	
 	

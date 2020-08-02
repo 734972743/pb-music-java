@@ -1,10 +1,11 @@
 package com.pb.weixin.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
 //歌单收藏歌曲vo
-public class SongListWithSong {
+public class SongListWithSong implements Serializable{
 
 	public Integer slSongId;  //歌曲歌单编号
 	public Integer songListId;  //歌单编号，外键

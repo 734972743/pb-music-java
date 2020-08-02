@@ -1,12 +1,24 @@
 package com.pb.weixin.vo;
 
+import java.io.Serializable;
 import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-public class User {
+@Entity
+@Table(name="t_user")
+public class User implements Serializable{
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)   //表示是ID自增
 	private Integer userId;   //用户编号
+	
 	private String loginId;   //用户账号
 	private String password;   //用户密码
 	private String userName;    //用户名称

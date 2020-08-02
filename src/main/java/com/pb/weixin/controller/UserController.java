@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pb.weixin.service.IUserService;
 import com.pb.weixin.utils.BaseResult;
+import com.pb.weixin.utils.SendEmail;
+import com.pb.weixin.vo.Email;
 import com.pb.weixin.vo.User;
 
 @RestController
@@ -99,6 +101,20 @@ public class UserController {
 				result.setMessage("注册成功");
 				//再根据注册的账号和密码查找该用户信息
 				User data = userSerivce.getUserByLoginIdAndPassword(user.getLoginId(), user.getPassword());
+				//用户登录成功后，应发送邮件给用户
+				if(!data.getEmail().equals("")) {
+					Email email = new Email();
+					email.setAcceptAddress(data.getEmail());
+					email.setSubject("PB音乐恭喜你注册成功");
+					email.setBody("<strong>"+data.getUserName()+"</strong>  你好:<br/>恭喜你成为PB音乐的用户</br>"
+							+ "你的登录名为:<strong>"+data.getLoginId()+"</strong>"
+							+ "你的密码为:<strong>"+data.getPassword()+"</strong>请妥善保管好<br/>"
+									+ "本网站网址为: <a href='www.panbang123.com'>www.panbang123.com</a>");
+					email.setSendDate(new Date());
+					
+					
+					SendEmail.sendEmail(email);
+				}
 				result.setData(data);
 			}else {
 				result.setCode(500);

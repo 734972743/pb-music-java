@@ -71,7 +71,7 @@ public class UserWithSongListController {
 		SongList songList = new SongList();
 		songList.setSongListName((String) map.get("collectionName"));
 		songList.setIntroduce((String) map.get("introduce"));
-		songList.setSongListStateId(Integer.parseInt((String) map.get("songListStateId")));
+		songList.setSongListStateId(Integer.parseInt(map.get("songListStateId")+""));
 
 		// 返回结果的ID
 		int data = 0;

@@ -38,6 +38,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
 
 		<!-- servlet 依赖 -->
 		<dependency>
@@ -57,7 +67,8 @@
 			<artifactId>tomcat-embed-jasper</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
+		
+		
 		<!-- https://mvnrepository.com/artifact/com.oracle/ojdbc7 -->
 		<dependency>
 			<groupId>com.oracle</groupId>
@@ -72,12 +83,14 @@
 		</dependency>
 
 
-		<!-- Mybatis -->
+		<!-- Mybatis  springboot -->
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
 			<version>1.2.0</version>
 		</dependency>
+		
+		
 
 		<!-- 阿里云的oss jar包 -->
 		<dependency>
@@ -99,16 +112,58 @@
 			<version>3.5.0</version>
 		</dependency>
 
+		<!--阿里云发送邮件-->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-dm</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+		<!--集成redis-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
-
+		
+		<!-- jedis Java用于连接redis的工具 -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		    <groupId>redis.clients</groupId>
+		    <artifactId>jedis</artifactId>
+		    <version>2.9.0</version>
 		</dependency>
-
+		
+		<!-- junit 用于测试 -->
+		<dependency>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		    <version>4.12</version>
+		</dependency>
+		
+		<!-- commons-lang3   常用的工具类 stringutil -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.7</version>
+		</dependency>
+		
+		
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>fastjson</artifactId>
+		    <version>1.2.47</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		</dependency>
+		
+		<!-- springboot configuration依赖 -->
+		<dependency>
+		      <groupId>org.springframework.boot</groupId>
+		      <artifactId> spring-boot-configuration-processor</artifactId>
+		      <optional> true </optional>
+		</dependency>
 
 
 	</dependencies>

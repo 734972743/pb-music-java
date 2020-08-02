@@ -3,6 +3,7 @@ package com.pb.weixin.service.impl;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 
 import com.aliyun.oss.ClientException;
 import com.aliyuncs.DefaultAcsClient;
@@ -15,7 +16,7 @@ import com.pb.weixin.service.IStsTokenService;
 import com.pb.weixin.utils.HelloOSS2;
 import com.pb.weixin.vo.StsTokenVO;
 
-
+@PropertySource("classpath:application.properties")
 public class StsTokenServiceImpl  {
 
 	// PropertyConfigurator.configure("conf/log4j.properties");
@@ -23,15 +24,38 @@ public class StsTokenServiceImpl  {
 	//LoggerFactory.getLogger(StsTokenServiceImpl.class);
 	static Logger logger = Logger.getLogger(StsTokenServiceImpl.class);
 	
-    //@Value("${aliyun.oss.accessKeyId}")
-    private static String accessKeyId = "LTAI4FvYEZDSMScaUFbmoo5y";
-  //  @Value("${aliyun.oss.accessKeySecret}")
-    private static String accessKeySecret = "8IEjEEe3FboF2q5eEfr8NSkWMbBTZM";
- //   @Value("${aliyun.sts.roleArn}")
-    private static String roleArn = "RamOssTest";
-  //  @Value("${aliyun.sts.roleSessionName}")
-   // private static String roleSessionName = "test";
-    /**
+    
+    private static String accessKeyId  ;
+    
+    private static String accessKeySecret ;
+    
+    private static String roleArn;
+    
+    private static String roleSessionName ;
+    
+    
+    @Value("${aliyun.oss.accessKeyId}")
+    public void setAccessKeyId(String accessKeyId) {
+		StsTokenServiceImpl.accessKeyId = accessKeyId;
+	}
+
+    @Value("${aliyun.oss.accessKeySecret}")
+	public void setAccessKeySecret(String accessKeySecret) {
+		StsTokenServiceImpl.accessKeySecret = accessKeySecret;
+	}
+    
+    @Value("${aliyun.sts.roleArn}")
+	public static void setRoleArn(String roleArn) {
+		StsTokenServiceImpl.roleArn = roleArn;
+	}
+
+    @Value("${aliyun.sts.roleSessionName}")
+	public void setRoleSessionName(String roleSessionName) {
+		StsTokenServiceImpl.roleSessionName = roleSessionName;
+	}
+
+
+	/**
      * token失效时间，单位秒(不设置默认1小时,这里设置5分钟)
      */
     private static final Long durationSeconds= 300L;
@@ -51,8 +75,8 @@ public class StsTokenServiceImpl  {
             // 添加endpoint（直接使用STS endpoint，前两个参数留空，无需添加region ID）
             DefaultProfile.addEndpoint("", "", "Sts", ENDPOINT);
             // 构造default profile（参数留空，无需添加region ID）
-            IClientProfile profile = DefaultProfile.getProfile("", accessKeyId, accessKeySecret);
-            System.out.println("accessKeyId,"+accessKeyId);
+            IClientProfile profile = DefaultProfile.getProfile("", StsTokenServiceImpl.accessKeyId, StsTokenServiceImpl.accessKeySecret);
+//            System.out.println("accessKeyId,"+StsTokenServiceImpl.accessKeyId);
             // 用profile构造client
             DefaultAcsClient client = new DefaultAcsClient(profile);
             final AssumeRoleRequest request = new AssumeRoleRequest();

@@ -3,13 +3,15 @@
 <mapper namespace="com.pb.weixin.dao.ITypeDao">
 
 	<resultMap id="typeMap" type="com.pb.weixin.vo.Type">
-	    <id column="TYPE_ID" jdbcType="INTEGER" property="typeId" />
+	    <id column="type_id" jdbcType="INTEGER" property="typeId" />
 	    <result column="TYPE_NAME" jdbcType="VARCHAR" property="typeName" />
+	    <result column="father_type_id" jdbcType="INTEGER" property="fatherTypeId" />
+	    <result column="father_type_name" jdbcType="VARCHAR" property="fatherTypeName" />
 	    
 	</resultMap> 
 
     <select id="getTypesAll" resultMap="typeMap">
-        select * from t_type
+        select t.* from t_type t 
     </select>
     
     
@@ -22,11 +24,17 @@
     
     <sql id="queryByCondition">
     	 <where>
-        	<if test="t.typeName != null || t.typeName != ''">
-        		and t.TYPE_NAME like CONCAT('%', #{typeName,jdbcType=VARCHAR}, "%") 
+        	<if test="t.typeName != null and t.typeName != ''">
+        		and t.TYPE_NAME like CONCAT('%', #{t.typeName,jdbcType=VARCHAR}, "%") 
         	</if>
-        	<if test="t.typeId != null || t.typeId != ''">
-        		and t.TYPE_ID = #{typeId,jdbcType=INTEGER}
+        	<if test="t.typeId != null">
+        		and t.TYPE_ID = #{t.typeId,jdbcType=INTEGER}
+        	</if>
+        	<if test="t.fatherTypeId != null">
+        		and t.father_type_id = #{t.fatherTypeId,jdbcType=INTEGER}
+        	</if>
+        	<if test="t.fatherTypeName != null and t.fatherTypeName != ''">
+        		and t.father_type_name = #{t.fatherTypeName,jdbcType=VARCHAR}
         	</if>
         </where>
     </sql>
@@ -42,4 +50,9 @@
 		</if>
     
     </select>
+    
+    
+    <select id="getTypesBy" resultMap="typeMap">
+    	select t.* from t_type t <include refid="queryByCondition"></include>
+    </select>	
 </mapper>

@@ -24,4 +24,7 @@ public interface IUserService {
 	
 	//删除User
 	public int deleteUserById(User user);
+	
+	//根据用户ID来获取所有的用户信息
+	public List<User> getUsersByIds(List<Integer> userIds);
 }

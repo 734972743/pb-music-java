@@ -1,5 +1,6 @@
 package com.pb.weixin.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -9,8 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.data.annotation.Transient;
 
-public class Song {
+
+public class Song implements Serializable{
 
 	
 	private Integer songId; // 歌曲编号
@@ -29,7 +32,13 @@ public class Song {
 	private Integer songTime; // 歌曲的时间长度(单位:秒)
 	private Integer typeId; // 歌曲的类型编号
 	private List<Integer> searchTypeIds; // 这是用来查询多个类型编号的歌曲的查询条件
+	private Date createDate;    //创建时间
+	
+	
 	private Integer songStateId; // 歌曲状态信息编号（可拓展字段）默认0;0正常发布状态1阻塞状态（不显示）2禁止下载 3条件下载（付费，待定）
+	
+	@Transient
+	private int isSort;  // 0 按时间升序 ， 1按时间降序
 
 	public Integer getSongId() {
 		return songId;
@@ -158,5 +167,22 @@ public class Song {
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
 	}
+	
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
+	public int getIsSort() {
+		return isSort;
+	}
+
+	@Transient
+	public void setIsSort(int isSort) {
+		this.isSort = isSort;
+	}
+
+	
 }

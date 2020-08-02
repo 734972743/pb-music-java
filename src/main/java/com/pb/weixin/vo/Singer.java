@@ -1,8 +1,9 @@
 package com.pb.weixin.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Singer {
+public class Singer implements Serializable{
 
 	private Integer singerId;   //歌手编号
 	private String singerName;   //歌手名称
@@ -15,6 +16,7 @@ public class Singer {
 	private String photoUrl;    //歌手图片链接地址
 	private Date debutDate;    //歌手出道时间
 	private Integer singerStateId;    //歌手状态信息编号（可拓展字段），默认为0，0表示正常状态，1表示阻塞状态
+	
 	
 	
 	
@@ -84,6 +86,7 @@ public class Singer {
 	public void setSingerStateId(Integer singerStateId) {
 		this.singerStateId = singerStateId;
 	}
+	
 	
 	
 

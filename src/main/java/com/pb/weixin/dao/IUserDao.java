@@ -3,7 +3,9 @@ package com.pb.weixin.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.pb.weixin.vo.Message;
 import com.pb.weixin.vo.User;
 
 public interface IUserDao {
@@ -26,4 +28,6 @@ public interface IUserDao {
 	//删除User
 	public int deleteUserById(User user);
 	
+	
+	public List<User> getUsersByIds(@Param("ids")List<Integer> ids);
 }

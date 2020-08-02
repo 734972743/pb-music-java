@@ -1,8 +1,9 @@
 package com.pb.weixin.vo;
 
+import java.io.Serializable;
 
 //这个是歌单收藏vo
-public class SongList {
+public class SongList implements Serializable{
 	
 	private Integer songListId;   //歌单编号
 	private String songListName;   //歌单名称

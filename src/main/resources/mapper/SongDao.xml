@@ -18,6 +18,7 @@
 	    <result column="SONG_TIME" jdbcType="DATE" property="songTime" />
 	    <result column="TYPE_ID" jdbcType="INTEGER" property="typeId" />
 	    <result column="SONG_STATE_ID" jdbcType="INTEGER" property="songStateId" />
+	     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
 	</resultMap> 
 	
 	<sql id="ColumnList" >
@@ -76,7 +77,16 @@
 		    <if test="t != null and t.songStateId != null and t.songStateId != ''">
 		       and  t.SONG_STATE_ID = #{t.songStateId ,jdbcType=INTEGER}
 		    </if>
+		   
 		 </where>
+		 
+		 <if test="t != null and t.isSort == 0">
+		       order by t.create_date asc
+	    </if>
+	    
+	    <if test="t != null and t.isSort == 1">
+	       order by t.create_date desc
+	    </if>
   	</sql>
 	
 	<select id="queryTotalCount" resultType="int">
@@ -178,13 +188,18 @@
    	</select>
    	
    	<insert id="addSong">
-   		insert into t_song (SONG_NAME,TYPE_ID,IMG_URL,SONG_URL) values (
-   		#{t.songListId, jdbcType=VARCHAR},
+   		insert into t_song (SONG_NAME,TYPE_ID,IMG_URL,create_date) values (
+   		#{t.songName, jdbcType=VARCHAR},
    		#{t.typeId, jdbcType=INTEGER},
    		#{t.imgUrl, jdbcType=VARCHAR},
-   		#{t.songUrl, jdbcType=VARCHAR}
+   		#{t.createDate, jdbcType=VARCHAR}
    		)
    	</insert>
+   	
+   	<delete id="deleteSong">
+   		delete from t_song 
+   		where SONG_NAME =  #{t.songName, jdbcType=VARCHAR}
+   	</delete>
     
     
     

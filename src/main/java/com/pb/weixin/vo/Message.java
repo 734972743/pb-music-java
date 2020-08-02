@@ -1,5 +1,6 @@
 package com.pb.weixin.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -11,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="t_message")
-public class Message  {
+public class Message  implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)   //表示是ID自增
@@ -26,6 +27,8 @@ public class Message  {
 	private Integer  userId;
 	private Integer  toUserId;
 	private Date  createTime;
+	
+	//private String userName;
 	
 	
 //	private String userName;

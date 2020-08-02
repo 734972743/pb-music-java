@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 
@@ -15,10 +16,10 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 
 //启动类直接在根包下新建
-//@RestController
 @SpringBootApplication   //标记位一个springboot应用 的启动类
 //@EnableSwagger2
 @MapperScan("com.pb.weixin.dao")  //要扫描的dao包
+@EnableScheduling //开启定时任务
 public class SpringbootApplication extends SpringBootServletInitializer {
 
 	
